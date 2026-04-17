@@ -1,0 +1,32 @@
+.env
+.codex
+backups/
+
+# Runtime state, databases, caches and generated secrets
+filebrowser/database/*
+homarr/configs/*
+homarr/icons/*
+jellyfin/cache/*
+jellyfin/config/*
+librespeed/config/*
+netdata/cache/*
+netdata/config/*
+netdata/lib/*
+portainer/data/*
+prowlarr/config/*
+qbittorrent/config/*
+radarr/config/*
+uptime-kuma/data/*
+
+# Keep directory structure in Git
+!filebrowser/database/.gitkeep
+!homarr/configs/.gitkeep
+!homarr/icons/.gitkeep
+!jellyfin/cache/.gitkeep
+!jellyfin/config/.gitkeep
+!librespeed/config/.gitkeep
+!netdata/config/.gitkeep
+!portainer/data/.gitkeep
+!prowlarr/config/.gitkeep
+!qbittorrent/config/.gitkeep
+!radarr/config/.gitkeep
