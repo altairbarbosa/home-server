@@ -28,7 +28,16 @@ services:
     volumes:
       - ./jellyfin/config:/config
       - ./jellyfin/cache:/cache
-      - ${MEDIA_ROOT}:/data
+      - type: bind
+        source: ${MEDIA_ROOT}
+        target: /data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${MEDIA_ROOT}
+        target: /mnt
+        bind:
+          propagation: rslave
     restart: unless-stopped
 
   filebrowser:
@@ -57,12 +66,12 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=${QBITTORRENT_WEBUI_PORT}
     volumes:
       - ./qbittorrent/config:/config
       - ${MEDIA_ROOT}:/data
     ports:
-      - "${QBITTORRENT_WEBUI_PORT}:8080"
+      - "${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}"
       - "${QBITTORRENT_TCP_PORT}:6881"
       - "${QBITTORRENT_UDP_PORT}:6881/udp"
     restart: unless-stopped
@@ -92,6 +101,10 @@ services:
   netdata:
     image: ${NETDATA_IMAGE}
     container_name: netdata
+    environment:
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_TOKEN=${NETDATA_CLAIM_TOKEN:-}
+      - NETDATA_CLAIM_ROOMS=${NETDATA_CLAIM_ROOMS:-}
     ports:
       - "${NETDATA_PORT}:19999"
     cap_add:
