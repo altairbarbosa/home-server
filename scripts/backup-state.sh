@@ -14,6 +14,7 @@ items=(
   "librespeed/config"
   "netdata/config"
   "netdata/lib"
+  "n8n/data"
   "portainer/data"
   "prowlarr/config"
   "qbittorrent/config"

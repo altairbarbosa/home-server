@@ -12,6 +12,7 @@ librespeed/config/*
 netdata/cache/*
 netdata/config/*
 netdata/lib/*
+n8n/data/*
 portainer/data/*
 prowlarr/config/*
 qbittorrent/config/*
@@ -26,6 +27,7 @@ uptime-kuma/data/*
 !jellyfin/config/.gitkeep
 !librespeed/config/.gitkeep
 !netdata/config/.gitkeep
+!n8n/data/.gitkeep
 !portainer/data/.gitkeep
 !prowlarr/config/.gitkeep
 !qbittorrent/config/.gitkeep
