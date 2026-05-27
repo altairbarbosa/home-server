@@ -124,6 +124,24 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped
 
+  n8n:
+    image: ${N8N_IMAGE}
+    container_name: n8n
+    environment:
+      - TZ=${TZ}
+      - GENERIC_TIMEZONE=${TZ}
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
+    ports:
+      - "${N8N_PORT}:5678"
+    volumes:
+      - ./n8n/data:/home/node/.n8n
+    restart: unless-stopped
+
   radarr:
     image: ${RADARR_IMAGE}
     container_name: radarr

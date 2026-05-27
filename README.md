@@ -24,6 +24,16 @@ O script:
 - valida a configuração do `docker compose`;
 - sobe os containers em background.
 
+## Serviços
+
+O n8n fica disponível em:
+
+```text
+http://localhost:9010/
+```
+
+Se você acessar o n8n por outro host da rede, ajuste `N8N_HOST` e `N8N_WEBHOOK_URL` no `.env` para o IP ou domínio usado no navegador. Em HTTP local/LAN, `N8N_SECURE_COOKIE=false` evita o bloqueio de cookie seguro; para exposição pública, prefira HTTPS e cookie seguro.
+
 ## Provisionar um host novo
 
 Em um Ubuntu ou Debian recém-instalado, o fluxo pode ser automatizado com:
