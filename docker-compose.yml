@@ -2,12 +2,16 @@ services:
   homarr:
     image: ${HOMARR_IMAGE}
     container_name: homarr
+    environment:
+      - PORT=7575
     ports:
       - "${HOMARR_PORT}:7575"
     volumes:
       - ./homarr/configs:/app/data/configs
       - ./homarr/icons:/app/public/icons
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://$$(hostname):7575 || exit 1"]
     restart: unless-stopped
 
   portainer:
@@ -46,7 +50,11 @@ services:
     ports:
       - "${FILEBROWSER_PORT}:80"
     volumes:
-      - ${MEDIA_ROOT}:/srv
+      - type: bind
+        source: ${MEDIA_ROOT}
+        target: /srv
+        bind:
+          propagation: rslave
       - ./filebrowser/database:/database
     command:
       - --database
@@ -69,7 +77,11 @@ services:
       - WEBUI_PORT=${QBITTORRENT_WEBUI_PORT}
     volumes:
       - ./qbittorrent/config:/config
-      - ${MEDIA_ROOT}:/data
+      - type: bind
+        source: ${MEDIA_ROOT}
+        target: /data
+        bind:
+          propagation: rslave
     ports:
       - "${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}"
       - "${QBITTORRENT_TCP_PORT}:6881"
@@ -167,4 +179,21 @@ services:
       - ./prowlarr/config:/config
     ports:
       - "${PROWLARR_PORT}:9696"
+    restart: unless-stopped
+
+  swingmusic:
+    image: ${SWINGMUSIC_IMAGE}
+    container_name: swingmusic
+    environment:
+      - SWINGMUSIC_PORT=1970
+      - SWINGMUSIC_DEVICE_NAME=${SWINGMUSIC_DEVICE_NAME}
+    volumes:
+      - type: bind
+        source: ${MEDIA_ROOT}
+        target: /music
+        bind:
+          propagation: rslave
+      - ./swingmusic/config:/config
+    ports:
+      - "${SWINGMUSIC_PORT}:1970"
     restart: unless-stopped
