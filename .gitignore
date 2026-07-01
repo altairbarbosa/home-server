@@ -17,6 +17,7 @@ portainer/data/*
 prowlarr/config/*
 qbittorrent/config/*
 radarr/config/*
+swingmusic/config/*
 uptime-kuma/data/*
 
 # Keep directory structure in Git
@@ -32,3 +33,4 @@ uptime-kuma/data/*
 !prowlarr/config/.gitkeep
 !qbittorrent/config/.gitkeep
 !radarr/config/.gitkeep
+!swingmusic/config/.gitkeep

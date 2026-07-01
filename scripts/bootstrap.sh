@@ -39,6 +39,7 @@ create_directories() {
     "prowlarr/config"
     "qbittorrent/config"
     "radarr/config"
+    "swingmusic/config"
     "uptime-kuma/data"
   )
 
