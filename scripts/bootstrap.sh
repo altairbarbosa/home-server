@@ -35,6 +35,8 @@ create_directories() {
     "netdata/config"
     "netdata/lib"
     "n8n/data"
+    "nextcloud/db"
+    "nextcloud/html"
     "portainer/data"
     "prowlarr/config"
     "qbittorrent/config"
@@ -47,6 +49,10 @@ create_directories() {
   for path in "${directories[@]}"; do
     mkdir -p "${ROOT_DIR}/${path}"
   done
+
+  if [[ -n "${NEXTCLOUD_DATA_ROOT:-}" ]]; then
+    mkdir -p "${NEXTCLOUD_DATA_ROOT}"
+  fi
 }
 
 main() {
@@ -58,6 +64,10 @@ main() {
 
   cd "${ROOT_DIR}"
   create_env_file
+  set -a
+  # shellcheck disable=SC1090
+  source "${ENV_FILE}"
+  set +a
   create_directories
 
   docker compose --env-file "${ENV_FILE}" config >/dev/null

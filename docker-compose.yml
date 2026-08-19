@@ -50,9 +50,15 @@ services:
     ports:
       - "${FILEBROWSER_PORT}:80"
     volumes:
+      - ./filebrowser/root:/srv
       - type: bind
-        source: ${MEDIA_ROOT}
-        target: /srv
+        source: /mnt/WD_Blue
+        target: /srv/WD_Blue
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt/WD_Externo
+        target: /srv/WD_Externo
         bind:
           propagation: rslave
       - ./filebrowser/database:/database
@@ -196,4 +202,88 @@ services:
       - ./swingmusic/config:/config
     ports:
       - "${SWINGMUSIC_PORT}:1970"
+    restart: unless-stopped
+
+  nextcloud-db:
+    image: ${NEXTCLOUD_DB_IMAGE}
+    container_name: nextcloud-db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    environment:
+      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${NEXTCLOUD_DB_NAME}
+      - MYSQL_USER=${NEXTCLOUD_DB_USER}
+      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
+      - TZ=${TZ}
+    volumes:
+      - ./nextcloud/db:/var/lib/mysql
+    restart: unless-stopped
+
+  nextcloud-redis:
+    image: ${NEXTCLOUD_REDIS_IMAGE}
+    container_name: nextcloud-redis
+    restart: unless-stopped
+
+  nextcloud:
+    image: ${NEXTCLOUD_IMAGE}
+    container_name: nextcloud
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    environment:
+      - MYSQL_HOST=nextcloud-db
+      - MYSQL_DATABASE=${NEXTCLOUD_DB_NAME}
+      - MYSQL_USER=${NEXTCLOUD_DB_USER}
+      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
+      - REDIS_HOST=nextcloud-redis
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS}
+      - PHP_MEMORY_LIMIT=${NEXTCLOUD_PHP_MEMORY_LIMIT}
+      - PHP_UPLOAD_LIMIT=${NEXTCLOUD_PHP_UPLOAD_LIMIT}
+      - TZ=${TZ}
+    ports:
+      - "${NEXTCLOUD_PORT}:80"
+    volumes:
+      - ./nextcloud/html:/var/www/html
+      - type: bind
+        source: ${NEXTCLOUD_DATA_ROOT}
+        target: /var/www/html/data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt/WD_Blue
+        target: /external/disks/WD_Blue
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt/WD_Externo
+        target: /external/disks/WD_Externo
+        bind:
+          propagation: rslave
+    restart: unless-stopped
+
+  nextcloud-cron:
+    image: ${NEXTCLOUD_IMAGE}
+    container_name: nextcloud-cron
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    entrypoint: /cron.sh
+    volumes:
+      - ./nextcloud/html:/var/www/html
+      - type: bind
+        source: ${NEXTCLOUD_DATA_ROOT}
+        target: /var/www/html/data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt/WD_Blue
+        target: /external/disks/WD_Blue
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt/WD_Externo
+        target: /external/disks/WD_Externo
+        bind:
+          propagation: rslave
     restart: unless-stopped

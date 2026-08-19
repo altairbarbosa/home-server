@@ -46,6 +46,24 @@ Na rede local ou pela VPN Tailscale, acesse pelo nome estável do servidor:
 http://e-cube:9012/
 ```
 
+O Nextcloud fica disponível em:
+
+```text
+http://localhost:9013/
+```
+
+Na rede local:
+
+```text
+http://192.168.15.5:9013/
+```
+
+Os arquivos enviados para o Nextcloud ficam em `NEXTCLOUD_DATA_ROOT`, que por padrao aponta para:
+
+```text
+/mnt/WD_Blue/Nextcloud/data
+```
+
 ## Provisionar um host novo
 
 Em um Ubuntu ou Debian recém-instalado, o fluxo pode ser automatizado com:
