@@ -13,6 +13,8 @@ netdata/cache/*
 netdata/config/*
 netdata/lib/*
 n8n/data/*
+nextcloud/db/*
+nextcloud/html/*
 portainer/data/*
 prowlarr/config/*
 qbittorrent/config/*
@@ -29,6 +31,8 @@ uptime-kuma/data/*
 !librespeed/config/.gitkeep
 !netdata/config/.gitkeep
 !n8n/data/.gitkeep
+!nextcloud/db/.gitkeep
+!nextcloud/html/.gitkeep
 !portainer/data/.gitkeep
 !prowlarr/config/.gitkeep
 !qbittorrent/config/.gitkeep
