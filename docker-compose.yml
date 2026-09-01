@@ -33,13 +33,13 @@ services:
       - ./jellyfin/config:/config
       - ./jellyfin/cache:/cache
       - type: bind
-        source: ${MEDIA_ROOT}
-        target: /data
+        source: /mnt/WD_Blue
+        target: /mnt/WD_Blue
         bind:
           propagation: rslave
       - type: bind
-        source: ${MEDIA_ROOT}
-        target: /mnt
+        source: /mnt/WD_Externo
+        target: /mnt/WD_Externo
         bind:
           propagation: rslave
     restart: unless-stopped
