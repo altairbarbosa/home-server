@@ -61,6 +61,11 @@ services:
         target: /srv/WD_Externo
         bind:
           propagation: rslave
+      - type: bind
+        source: /mnt/Samsung
+        target: /srv/Samsung
+        bind:
+          propagation: rslave
       - ./filebrowser/database:/database
     command:
       - --database
@@ -260,6 +265,11 @@ services:
         target: /external/disks/WD_Externo
         bind:
           propagation: rslave
+      - type: bind
+        source: /mnt/Samsung
+        target: /external/disks/Samsung
+        bind:
+          propagation: rslave
     restart: unless-stopped
 
   nextcloud-cron:
@@ -284,6 +294,11 @@ services:
       - type: bind
         source: /mnt/WD_Externo
         target: /external/disks/WD_Externo
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt/Samsung
+        target: /external/disks/Samsung
         bind:
           propagation: rslave
     restart: unless-stopped
